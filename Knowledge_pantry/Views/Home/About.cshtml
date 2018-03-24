@@ -1,0 +1,25 @@
+﻿@model Knowledge_pantry.Models.Summary
+@{
+    ViewBag.Title = "Добавление статьи";
+}
+<form asp-action="create" asp-controller="home">
+    <div class="form-group">
+        <label asp-for="Caption" class="control-label">Название</label>
+        <input type="text" asp-for="Caption" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Annotation" class="control-label">Краткое описание</label>
+        <input type="text" asp-for="Annotation" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NumberOfSpecialty" class="control-label">Номер специальности</label>
+        <input type="number" asp-for="NumberOfSpecialty" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NumberOfSpecialty" class="control-label">Номер специальности</label>
+        <input type="number" asp-for="NumberOfSpecialty" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Send" class="btn btn-default" />
+    </div>
+</form>

@@ -1,0 +1,12 @@
+E:\Programs\Knowledge_pantry\Knowledge_pantry\bin\Debug\netcoreapp2.0\Knowledge_pantry.deps.json
+E:\Programs\Knowledge_pantry\Knowledge_pantry\bin\Debug\netcoreapp2.0\Knowledge_pantry.runtimeconfig.json
+E:\Programs\Knowledge_pantry\Knowledge_pantry\bin\Debug\netcoreapp2.0\Knowledge_pantry.runtimeconfig.dev.json
+E:\Programs\Knowledge_pantry\Knowledge_pantry\bin\Debug\netcoreapp2.0\Knowledge_pantry.dll
+E:\Programs\Knowledge_pantry\Knowledge_pantry\bin\Debug\netcoreapp2.0\Knowledge_pantry.pdb
+E:\Programs\Knowledge_pantry\Knowledge_pantry\obj\Debug\netcoreapp2.0\Knowledge_pantry.csprojResolveAssemblyReference.cache
+E:\Programs\Knowledge_pantry\Knowledge_pantry\obj\Debug\netcoreapp2.0\Knowledge_pantry.csproj.CoreCompileInputs.cache
+E:\Programs\Knowledge_pantry\Knowledge_pantry\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+E:\Programs\Knowledge_pantry\Knowledge_pantry\obj\Debug\netcoreapp2.0\Knowledge_pantry.AssemblyInfoInputs.cache
+E:\Programs\Knowledge_pantry\Knowledge_pantry\obj\Debug\netcoreapp2.0\Knowledge_pantry.AssemblyInfo.cs
+E:\Programs\Knowledge_pantry\Knowledge_pantry\obj\Debug\netcoreapp2.0\Knowledge_pantry.dll
+E:\Programs\Knowledge_pantry\Knowledge_pantry\obj\Debug\netcoreapp2.0\Knowledge_pantry.pdb

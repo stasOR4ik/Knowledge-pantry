@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Knowledge_pantry.Models.Summary>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<table class="table">
+    <tr><td>Название</td><td>Краткое изложение</td><td>Текст</td><td>Имя создателя</td></tr>
+    @foreach (var item in Model)
+    {
+        <tr><td>@item.Caption</td><td>@item.Annotation</td><td>@item.Text</td><td>@item.LinkToCreator</td></tr>
+    }
+</table>
