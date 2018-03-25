@@ -491,6 +491,22 @@ namespace Knowledge_pantry.Controllers
             return View(nameof(ShowRecoveryCodes), model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> LectureSummaries()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new LectureSummariesViewModel
+            {
+            };
+
+            return View(model);
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
