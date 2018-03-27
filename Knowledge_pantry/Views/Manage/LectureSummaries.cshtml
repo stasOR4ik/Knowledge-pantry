@@ -4,8 +4,11 @@
     ViewData.AddActivePage(ManageNavPages.LectureSummaries);
 }
 
-
-
-@section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
-}
+<strong class="text-center">@Model.UserName summaries</strong>
+<form action="../CreateNewSummary/CreateNewSummary">
+    <button type="submit" class="btn btn-success col-lg-1">Create</button><br />
+    @foreach (var summary in Model.UserSummaries)
+    {
+        <br /><a>@summary.Caption</a>
+    }
+</form>

@@ -7,5 +7,7 @@ namespace Knowledge_pantry.Models.ManageViewModels
 {
     public class LectureSummariesViewModel
     {
+        public string UserName { get; set; }
+        public List<Summary> UserSummaries { get; set; }
     }
 }
