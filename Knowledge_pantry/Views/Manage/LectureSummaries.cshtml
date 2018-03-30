@@ -4,11 +4,15 @@
     ViewData.AddActivePage(ManageNavPages.LectureSummaries);
 }
 
+
 <strong class="text-center">@Model.UserName summaries</strong>
-<form action="../CreateNewSummary/CreateNewSummary">
+<form action="../SummaryOptions/CreateSummary">
     <button type="submit" class="btn btn-success col-lg-1">Create</button><br />
+
+</form>
+<form asp-action="../SummaryOptions/ViewAndEditSummary">
     @foreach (var summary in Model.UserSummaries)
     {
-        <br /><a>@summary.Caption</a>
+        <br /><a asp-controller="SummaryOptions" asp-action="ViewAndEditSummary" asp-route-id="@summary.Id">@summary.Caption</a>
     }
 </form>

@@ -520,16 +520,9 @@ namespace Knowledge_pantry.Controllers
                 UserName = user.UserName,
                 UserSummaries = temporaryUserSummaries
             };
-
+            ViewData["SummaryId"] = "";
             return View(model);
         }
-
-        [HttpPost]
-        public IActionResult LectureSummaries(int summaryId)
-        {
-            return View("CreateNewSummary");
-        }
-
 
         #region Helpers
 
