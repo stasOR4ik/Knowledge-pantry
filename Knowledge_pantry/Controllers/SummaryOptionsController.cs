@@ -52,7 +52,8 @@ namespace Knowledge_pantry.Controllers
                 Like = 0,
                 NumberOfSpecialty = numberOfSpecialty,
                 Text = text,
-                LinkToCreator = _userManager.GetUserId(User)
+                LinkToCreator = _userManager.GetUserId(User),
+                LastUpdateTime = DateTime.Now
             };
             db.Add(summary);
             db.SaveChanges();
@@ -66,17 +67,27 @@ namespace Knowledge_pantry.Controllers
         }
 
         [HttpPost]
-        public IActionResult ViewAndEditSummary(string caption, int numberOfSpecialty, string annotation, string text, int id, int like)
+        public IActionResult ViewAndEditSummary(bool delete, string caption, int numberOfSpecialty, string annotation, string text, int id, int like)
         {
             Summary summary = db.Summaries.FirstOrDefault(p => p.Id == id);
-            summary.Caption = caption;
-            summary.Annotation = annotation;
-            summary.Like = like;
-            summary.NumberOfSpecialty = numberOfSpecialty;
-            summary.Text = text;
-            db.Update(summary);
-            db.SaveChanges();
-            return RedirectToAction("CreateSummary");
+            if (delete != true)
+            {
+                summary.Caption = caption;
+                summary.Annotation = annotation;
+                summary.Like = like;
+                summary.NumberOfSpecialty = numberOfSpecialty;
+                summary.Text = text;
+                summary.LastUpdateTime = DateTime.Now;
+                db.Update(summary);
+                db.SaveChanges();
+                
+            }
+           else
+            {
+                db.Remove(summary);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

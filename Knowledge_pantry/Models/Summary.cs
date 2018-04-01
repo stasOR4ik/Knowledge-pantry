@@ -14,5 +14,6 @@ namespace Knowledge_pantry.Models
         public int NumberOfSpecialty { get; set; }
         public string Text { get; set; }
         public int Like { get; set; }
+        public DateTime LastUpdateTime { get; set; }
     }
 }

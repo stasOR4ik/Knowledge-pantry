@@ -4,6 +4,7 @@
 }
 
 <form method="post">
+    
     <div class="form-group row">
         <div class="col-6 col-lg-3">
             <input class="form-control" id="caption" name="caption" value="@Model.Caption">
@@ -26,7 +27,11 @@
     </div>
     <div class="row">
         <div class="col-3 col-lg-1">
-            <button type="submit" class="form-control btn btn-primary" asp-route-id="@Model.Id" asp-route-like="@Model.Like">Edit</button>
+            <button type="submit" class="form-control btn btn-primary"
+                    asp-route-id="@Model.Id" asp-route-like="@Model.Like">Edit</button>
+        </div>
+        <div class="col-3 col-lg-1">
+            <button type="submit" class="form-control btn btn-danger" asp-route-id="@Model.Id" asp-route-delete="@true">Delete</button>
         </div>
     </div>
 </form>

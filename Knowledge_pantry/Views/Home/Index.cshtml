@@ -1,12 +1,35 @@
-﻿@model IEnumerable<Knowledge_pantry.Models.Summary>
+﻿@using Knowledge_pantry.Models
 @{
     ViewData["Title"] = "Home Page";
 }
-
+@model IEnumerable<Summary>
+<h1>Список статей</h1>
 <table class="table">
-    <tr><td>Название</td><td>Краткое изложение</td><td>Текст</td><td>Имя создателя</td></tr>
-    @foreach (var item in Model)
+    <tr>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.CaptionSort">
+                Caption
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.LastUpdateTimeSort">
+                Date
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.LikeSort">
+                Like
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.NumberOfSpecialtySort">
+                Number of specialty
+            </a>
+        </th>
+    </tr>
+    @foreach (Summary u in Model)
     {
-        <tr><td>@item.Caption</td><td>@item.Annotation</td><td>@item.Text</td><td>@item.LinkToCreator</td></tr>
+        <tr><td><a asp-controller="SummaryOptions" asp-action="ViewAndEditSummary" asp-route-id="@u.Id">@u.Caption</a>
+            </td><td>@u.LastUpdateTime</td><td>@u.Like</td><td>@u.NumberOfSpecialty</td></tr>
     }
 </table>

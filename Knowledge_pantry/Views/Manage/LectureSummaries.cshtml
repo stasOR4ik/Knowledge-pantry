@@ -7,12 +7,21 @@
 
 <strong class="text-center">@Model.UserName summaries</strong>
 <form action="../SummaryOptions/CreateSummary">
-    <button type="submit" class="btn btn-success col-lg-1">Create</button><br />
-
-</form>
-<form asp-action="../SummaryOptions/ViewAndEditSummary">
-    @foreach (var summary in Model.UserSummaries)
-    {
-        <br /><a asp-controller="SummaryOptions" asp-action="ViewAndEditSummary" asp-route-id="@summary.Id">@summary.Caption</a>
-    }
+    <div class="btn-group" role="group">
+        <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Sort
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.CaptionSort">Caption</a></li>
+            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.LastUpdateTimeSort">Date</a></li>
+            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.LikeSort">Like</a></li>
+            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.NumberOfSpecialtySort">Number of specialty</a></li>
+        </ul>
+    </div>
+        <button type="submit" class="btn btn-success col-lg-1">Create</button><br />
+        @foreach (var summary in Model.UserSummaries)
+        {
+            <br /><a asp-controller="SummaryOptions" asp-action="ViewAndEditSummary" asp-route-id="@summary.Id">@summary.Caption</a>
+        }
 </form>
