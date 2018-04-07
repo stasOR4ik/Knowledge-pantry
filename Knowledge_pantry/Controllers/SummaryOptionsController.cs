@@ -1,5 +1,6 @@
 ﻿using Knowledge_pantry.Data;
 using Knowledge_pantry.Models;
+using Knowledge_pantry.Models.SummaryOptionsViewModels;
 using Knowledge_pantry.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -63,14 +64,28 @@ namespace Knowledge_pantry.Controllers
         [HttpGet]
         public IActionResult ViewAndEditSummary(int id)
         {
-            return View(db.Summaries.FirstOrDefault(p => p.Id == id));
+            List<Comment> temporarySummaryComments = new List<Comment>();
+            Summary summary = db.Summaries.FirstOrDefault(p => p.Id == id);
+            foreach (var comment in db.Comments)
+            {
+                if (comment.SummaryLink == summary.Id)
+                {
+                    temporarySummaryComments.Add(comment);
+                }
+            }
+            var model = new ViewAndEditSummaryViewModel
+            {
+                Lecture = summary,
+                LectureComments = temporarySummaryComments.OrderBy(s => s.CreationTime).ToList()
+            };
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult ViewAndEditSummary(bool delete, string caption, int numberOfSpecialty, string annotation, string text, int id, int like)
         {
             Summary summary = db.Summaries.FirstOrDefault(p => p.Id == id);
-            if (delete != true)
+            if (!delete)
             {
                 summary.Caption = caption;
                 summary.Annotation = annotation;
@@ -79,14 +94,12 @@ namespace Knowledge_pantry.Controllers
                 summary.Text = text;
                 summary.LastUpdateTime = DateTime.Now;
                 db.Update(summary);
-                db.SaveChanges();
-                
             }
            else
             {
                 db.Remove(summary);
-                db.SaveChanges();
             }
+            db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
     }

@@ -1,37 +1,55 @@
-﻿@model Knowledge_pantry.Models.Summary
+﻿@model Knowledge_pantry.Models.SummaryOptionsViewModels.ViewAndEditSummaryViewModel
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
 <form method="post">
-    
+
     <div class="form-group row">
         <div class="col-6 col-lg-3">
-            <input class="form-control" id="caption" name="caption" value="@Model.Caption">
+            <input class="form-control" id="caption" name="caption" value="@Model.Lecture.Caption">
         </div>
     </div>
     <div class="form-group row">
         <div class="col-6 col-lg-3">
-            <input class="form-control" id="numberOfSpecialty" name="numberOfSpecialty" value="@Model.NumberOfSpecialty">
+            <input class="form-control" id="numberOfSpecialty" name="numberOfSpecialty" value="@Model.Lecture.NumberOfSpecialty">
         </div>
     </div>
     <div class="form-group row">
         <div class="col-6 col-lg-6">
-            <textarea class="form-control" id="annotation" name="annotation">@Model.Annotation</textarea>
+            <textarea class="form-control" id="annotation" name="annotation">@Model.Lecture.Annotation</textarea>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-6 col-lg-9">
-            <textarea class="form-control" id="text" name="text">@Model.Text</textarea>
+            <textarea class="form-control" id="text" name="text">@Model.Lecture.Text</textarea>
         </div>
     </div>
     <div class="row">
         <div class="col-3 col-lg-1">
             <button type="submit" class="form-control btn btn-primary"
-                    asp-route-id="@Model.Id" asp-route-like="@Model.Like">Edit</button>
+                    asp-route-id="@Model.Lecture.Id" asp-route-like="@Model.Lecture.Like">
+                Edit
+            </button>
         </div>
         <div class="col-3 col-lg-1">
-            <button type="submit" class="form-control btn btn-danger" asp-route-id="@Model.Id" asp-route-delete="@true">Delete</button>
+            <button type="submit" class="form-control btn btn-danger" asp-route-id="@Model.Lecture.Id" asp-route-delete="@true">Delete</button>
         </div>
     </div>
+    <div class="form-group row">
+        <input />
+        <button>Send</button>
+    </div>
 </form>
+@foreach (Comment comment in Model.LectureComments)
+{
+    <div class="form-group row">
+        <label class="btn" id="takeParent">@comment.CreationTime @comment.CreatorName: @comment.Text</label>
+    </div>
+}
+<script>
+    document.getElementById("takeParent").addEventListener("click", function (e) {
+        let message = document.getElementById("message");
+        message.value = '';
+    });
+</script>
