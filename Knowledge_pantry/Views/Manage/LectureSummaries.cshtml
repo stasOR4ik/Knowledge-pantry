@@ -5,23 +5,38 @@
 }
 
 
-<strong class="text-center">@Model.UserName summaries</strong>
+<h3 class="text-center">@Model.UserName's summaries</h3>
 <form action="../SummaryOptions/CreateSummary">
-    <div class="btn-group" role="group">
-        <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Sort
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.CaptionSort">Caption</a></li>
-            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.LastUpdateTimeSort">Date</a></li>
-            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.LikeSort">Like</a></li>
-            <li><a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.NumberOfSpecialtySort">Number of specialty</a></li>
-        </ul>
-    </div>
-        <button type="submit" class="btn btn-success col-lg-1">Create</button><br />
-        @foreach (var summary in Model.UserSummaries)
-        {
-            <br /><a asp-controller="SummaryOptions" asp-action="ViewAndEditSummary" asp-route-id="@summary.Id">@summary.Caption</a>
-        }
+
+    @if (Model.UserSummaries != null)
+    {
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.CaptionSort">Caption</a>
+                </th>
+                <th>
+                    <a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.LastUpdateTimeSort">Date</a>
+                </th>
+                <th>
+                    <a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.LikeSort">Like</a>
+                </th>
+                <th>
+                    <a asp-action="LectureSummaries" asp-route-sortOrder="@ViewBag.NumberOfSpecialtySort">Number of specialty</a>
+                </th>
+            </tr>
+            @foreach (Summary u in Model.UserSummaries)
+             {
+                <tr>
+                    <td>
+                        <a asp-controller="SummaryOptions" asp-action="ViewAndEditSummary" asp-route-id="@u.Id">@u.Caption</a>
+                    </td>
+                    <td>@u.LastUpdateTime</td>
+                    <td>@u.Like</td>
+                    <td>@u.NumberOfSpecialty</td>
+                </tr>
+             }
+        </table>
+    }
+    <button type="submit" class="btn btn-success">Create</button>
 </form>

@@ -11,9 +11,10 @@ using System;
 namespace Knowledge_pantry.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180408083203_Add summaries list to user")]
+    partial class Addsummarieslisttouser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,6 +103,8 @@ namespace Knowledge_pantry.Data.Migrations
 
                     b.Property<string>("Annotation");
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<string>("Caption");
 
                     b.Property<DateTime>("LastUpdateTime");
@@ -115,6 +118,8 @@ namespace Knowledge_pantry.Data.Migrations
                     b.Property<string>("Text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Summaries");
                 });
@@ -232,6 +237,13 @@ namespace Knowledge_pantry.Data.Migrations
                     b.HasOne("Knowledge_pantry.Models.Summary", "Summary")
                         .WithMany("Comments")
                         .HasForeignKey("SummaryId");
+                });
+
+            modelBuilder.Entity("Knowledge_pantry.Models.Summary", b =>
+                {
+                    b.HasOne("Knowledge_pantry.Models.ApplicationUser")
+                        .WithMany("Summaries")
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

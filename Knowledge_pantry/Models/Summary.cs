@@ -15,5 +15,20 @@ namespace Knowledge_pantry.Models
         public string Text { get; set; }
         public int Like { get; set; }
         public DateTime LastUpdateTime { get; set; }
+        public List<Comment> Comments { get; set; }
+
+        public Summary() { }
+
+        public Summary(string caption, string annotation, int numberOfSpecialty, string text, string linkToCreator)
+        {
+            Caption = caption;
+            Annotation = annotation;
+            NumberOfSpecialty = numberOfSpecialty;
+            Text = text;
+            LinkToCreator = linkToCreator;
+            Like = 0;
+            LastUpdateTime = DateTime.Now;
+            Comments = new List<Comment>();
+        }
     }
 }

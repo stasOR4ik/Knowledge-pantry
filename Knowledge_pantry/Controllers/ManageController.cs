@@ -506,60 +506,49 @@ namespace Knowledge_pantry.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
-            //Summary findUserSummary = db.Summaries.FirstOrDefault(p => p.LinkToCreator == user.Id);
-            List<Summary> temporaryUserSummaries = new List<Summary>();
-            foreach (var summary in db.Summaries)
-            {
-                if (summary.LinkToCreator == user.Id)
-                {
-                    temporaryUserSummaries.Add(summary);
-                }
-            }
-            IQueryable<Summary> summaries = temporaryUserSummaries.AsQueryable();
-
             ViewData["CaptionSort"] = sortOrder == SortState.CaptionAscending ?
-                SortState.CaptionDescendingly : SortState.CaptionAscending;
+                    SortState.CaptionDescendingly : SortState.CaptionAscending;
             ViewData["LastUpdateTimeSort"] = sortOrder == SortState.LastUpdateTimeAscending ?
                 SortState.LastUpdateTimeDescendingly : SortState.LastUpdateTimeAscending;
             ViewData["LikeSort"] = sortOrder == SortState.LikeAscending ? SortState.LikeDescendingly : SortState.LikeAscending;
             ViewData["NumberOfSpecialtySort"] = sortOrder == SortState.NumberOfSpecialtyAscending ?
                 SortState.NumberOfSpecialtyDescendingly : SortState.NumberOfSpecialtyAscending;
-
+            List<Summary> temporarySummaries = new List<Summary>();
+            foreach (Summary summary in db.Summaries)
+            {
+                if (summary.LinkToCreator == _userManager.GetUserId(User))
+                {
+                    temporarySummaries.Add(summary);
+                }
+            }
             switch (sortOrder)
             {
                 case SortState.CaptionAscending:
-                    summaries = summaries.OrderBy(s => s.Caption);
+                    temporarySummaries = temporarySummaries.OrderBy(s => s.Caption).ToList();
                     break;
                 case SortState.CaptionDescendingly:
-                    summaries = summaries.OrderByDescending(s => s.Caption);
+                    temporarySummaries = temporarySummaries.OrderByDescending(s => s.Caption).ToList();
                     break;
                 case SortState.LastUpdateTimeDescendingly:
-                    summaries = summaries.OrderByDescending(s => s.LastUpdateTime);
+                    temporarySummaries = temporarySummaries.OrderByDescending(s => s.LastUpdateTime).ToList();
                     break;
                 case SortState.LikeAscending:
-                    summaries = summaries.OrderBy(s => s.Like);
+                    temporarySummaries = temporarySummaries.OrderBy(s => s.Like).ToList();
                     break;
                 case SortState.LikeDescendingly:
-                    summaries = summaries.OrderByDescending(s => s.Like);
+                    temporarySummaries = temporarySummaries.OrderByDescending(s => s.Like).ToList();
                     break;
                 case SortState.NumberOfSpecialtyAscending:
-                    summaries = summaries.OrderBy(s => s.NumberOfSpecialty);
+                    temporarySummaries = temporarySummaries.OrderBy(s => s.NumberOfSpecialty).ToList();
                     break;
                 case SortState.NumberOfSpecialtyDescendingly:
-                    summaries = summaries.OrderByDescending(s => s.NumberOfSpecialty);
+                    temporarySummaries = temporarySummaries.OrderByDescending(s => s.NumberOfSpecialty).ToList();
                     break;
                 default:
-                    summaries = summaries.OrderBy(s => s.LastUpdateTime);
+                    temporarySummaries = temporarySummaries.OrderBy(s => s.LastUpdateTime).ToList();
                     break;
             }
-
-            var model = new LectureSummariesViewModel
-            {
-                UserName = user.UserName,
-                UserSummaries = summaries.AsNoTracking().ToList()
-            };
-            return View(model);
+            return View(new LectureSummariesViewModel(_userManager.GetUserName(User), temporarySummaries));
         }
 
         #region Helpers

@@ -2,6 +2,11 @@
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
 }
+<style>
+    input[type="radio"] {
+        display: none;
+    }
+</style>
 
 <form method="post">
 
@@ -25,31 +30,48 @@
             <textarea class="form-control" id="text" name="text">@Model.Lecture.Text</textarea>
         </div>
     </div>
-    <div class="row">
-        <div class="col-3 col-lg-1">
-            <button type="submit" class="form-control btn btn-primary"
-                    asp-route-id="@Model.Lecture.Id" asp-route-like="@Model.Lecture.Like">
+    <div class="row form-inline">
+        <div class="">
+            <button type="submit" class="form-control btn btn-primary" asp-route-id="@Model.Lecture.Id" asp-route-like="@Model.Lecture.Like">
                 Edit
             </button>
-        </div>
-        <div class="col-3 col-lg-1">
             <button type="submit" class="form-control btn btn-danger" asp-route-id="@Model.Lecture.Id" asp-route-delete="@true">Delete</button>
         </div>
     </div>
-    <div class="form-group row">
-        <input />
-        <button>Send</button>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" id="messageText" name="messageText" />
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary" asp-route-id="@Model.Lecture.Id" asp-route-messageExist="@true">Send</button>
+                </span>
+            </div>
+        </div>
     </div>
+
+    @if(Model.LectureComments != null)
+     {
+        foreach (Comment comment in Model.LectureComments)
+        {
+        <div class="form-group row">
+            <blockquote>
+                <label>
+                    <input type="radio" value="@comment.Id" name="parentId" />
+                    @comment.CreatorName: @comment.Text
+                </label>
+                <footer>@comment.CreationTime</footer>
+            </blockquote>
+        </div>
+        }
+    @*<p id="comment_@comment.Id" onclick="www(@comment.Id)">
+        @comment.CreationTime @comment.CreatorName: @comment.Text
+    </p>*@
+     }
 </form>
-@foreach (Comment comment in Model.LectureComments)
-{
-    <div class="form-group row">
-        <label class="btn" id="takeParent">@comment.CreationTime @comment.CreatorName: @comment.Text</label>
-    </div>
-}
-<script>
-    document.getElementById("takeParent").addEventListener("click", function (e) {
-        let message = document.getElementById("message");
-        message.value = '';
-    });
-</script>
+
+@*<script>
+    function www(id) {
+        var element = document.getElementById("comment_" + id);
+        element.style.backgroundColor = "green";
+    }
+</script>*@

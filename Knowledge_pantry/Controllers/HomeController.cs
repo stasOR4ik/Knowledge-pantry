@@ -20,7 +20,6 @@ namespace Knowledge_pantry.Controllers
         public IActionResult Index(SortState sortOrder = SortState.LastUpdateTimeDescendingly)
         {
             IQueryable<Summary> summaries = db.Summaries;
-
             ViewData["CaptionSort"] = sortOrder == SortState.CaptionAscending ? 
                 SortState.CaptionDescendingly : SortState.CaptionAscending;
             ViewData["LastUpdateTimeSort"] = sortOrder == SortState.LastUpdateTimeAscending ?
@@ -28,7 +27,6 @@ namespace Knowledge_pantry.Controllers
             ViewData["LikeSort"] = sortOrder == SortState.LikeAscending ? SortState.LikeDescendingly : SortState.LikeAscending;
             ViewData["NumberOfSpecialtySort"] = sortOrder == SortState.NumberOfSpecialtyAscending ?
                 SortState.NumberOfSpecialtyDescendingly : SortState.NumberOfSpecialtyAscending;
-
             switch (sortOrder)
             {
                 case SortState.CaptionAscending:
@@ -57,26 +55,6 @@ namespace Knowledge_pantry.Controllers
                     break;
             }
             return View(summaries.AsNoTracking().ToList());
-        }
-
-        public IActionResult About()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult About(Summary summary)
-        {
-            db.Summaries.Add(summary);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
         }
 
         public IActionResult Error()

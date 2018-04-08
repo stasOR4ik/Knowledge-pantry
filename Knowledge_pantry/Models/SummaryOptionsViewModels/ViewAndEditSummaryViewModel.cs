@@ -9,5 +9,11 @@ namespace Knowledge_pantry.Models.SummaryOptionsViewModels
     {
         public Summary Lecture { get; set; }
         public List<Comment> LectureComments { get; set; }
+
+        public ViewAndEditSummaryViewModel(Summary summary, List<Comment> comments)
+        {
+            Lecture = summary;
+            LectureComments = comments;
+        }
     }
 }

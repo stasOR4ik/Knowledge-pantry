@@ -1,0 +1,53 @@
+﻿@model Knowledge_pantry.Models.SummaryOptionsViewModels.ViewAndEditSummaryViewModel
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+<style>
+    input[type="radio"] {
+        display: none;
+    }
+</style>
+
+<form method="post">
+
+    <div class="form-group row">
+        <div>
+            <h4 class="text-center">@Model.Lecture.Caption</h4>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-offset-3">
+            <p>@Model.Lecture.NumberOfSpecialty</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-offset-3">
+            <p>@Model.Lecture.Annotation</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-6 col-lg-9">
+            <p>@Model.Lecture.Text</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <input id="messageText" name="messageText" />
+        <button type="submit" class="btn btn-primary" asp-route-like="@Model.Lecture.Like" asp-route-id="@Model.Lecture.Id" asp-route-messageExist="@true">Send</button>
+    </div>
+
+    @if (Model.LectureComments != null)
+    {
+        foreach (Comment comment in Model.LectureComments)
+        {
+            <div class="form-group row">
+                <blockquote>
+                    <label>
+                        <input type="radio" value="@comment.Id" name="parentId" />
+                        @comment.CreatorName: @comment.Text
+                    </label>
+                    <footer>@comment.CreationTime</footer>
+                </blockquote>
+            </div>
+        }
+    }
+</form>

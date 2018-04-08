@@ -4,6 +4,7 @@ using Knowledge_pantry.Models.SummaryOptionsViewModels;
 using Knowledge_pantry.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -46,60 +47,116 @@ namespace Knowledge_pantry.Controllers
         [HttpPost]
         public IActionResult CreateSummary(string caption, int numberOfSpecialty, string annotation, string text)
         {
-            Summary summary = new Summary
-            {
-                Caption = caption,
-                Annotation = annotation,
-                Like = 0,
-                NumberOfSpecialty = numberOfSpecialty,
-                Text = text,
-                LinkToCreator = _userManager.GetUserId(User),
-                LastUpdateTime = DateTime.Now
-            };
-            db.Add(summary);
+            Summary summary = new Summary(caption, annotation, numberOfSpecialty, text, _userManager.GetUserId(User));
+            db.Summaries.Add(summary);
+            //ApplicationUser user = db.Users.FirstOrDefault(p => p.Id == _userManager.GetUserId(User));
+            //user.Summaries.Add(summary);
+            //db.Users.Update(user);
             db.SaveChanges();
-            return RedirectToAction("CreateSummary");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
         public IActionResult ViewAndEditSummary(int id)
         {
-            List<Comment> temporarySummaryComments = new List<Comment>();
-            Summary summary = db.Summaries.FirstOrDefault(p => p.Id == id);
-            foreach (var comment in db.Comments)
+            Summary summary = db.Summaries.Include(p => p.Comments).FirstOrDefault(p => p.Id == id);
+            if (_userManager.GetUserId(User) != summary.LinkToCreator)
             {
-                if (comment.SummaryLink == summary.Id)
+                return RedirectToAction("ViewSummary", new { id = id });
+            }
+            else
+            {
+                List<Comment> temporarySummaryComments = new List<Comment>();
+                if (summary.Comments.Count != 0)
                 {
-                    temporarySummaryComments.Add(comment);
+                    foreach (var comment in summary.Comments)
+                    {
+                        if (comment.ParentCommentId != 0)
+                        {
+                            comment.Text = db.Comments.FirstOrDefault(p => p.Id == comment.ParentCommentId).CreatorName + ", " + comment.Text;
+                        }
+                        temporarySummaryComments.Add(comment);
+                    }
+                    return View(new ViewAndEditSummaryViewModel(summary, temporarySummaryComments.OrderBy(s => s.CreationTime).ToList()));
+                }
+                else
+                {
+                    return View(new ViewAndEditSummaryViewModel(summary, null));
                 }
             }
-            var model = new ViewAndEditSummaryViewModel
-            {
-                Lecture = summary,
-                LectureComments = temporarySummaryComments.OrderBy(s => s.CreationTime).ToList()
-            };
-            return View(model);
         }
 
         [HttpPost]
-        public IActionResult ViewAndEditSummary(bool delete, string caption, int numberOfSpecialty, string annotation, string text, int id, int like)
+        public IActionResult ViewAndEditSummary(bool delete, string caption, int numberOfSpecialty, string annotation, string text,
+            int id, int like, bool messageExist, int parentId, string messageText)
         {
-            Summary summary = db.Summaries.FirstOrDefault(p => p.Id == id);
+            Summary summary = db.Summaries.Include(x => x.Comments).FirstOrDefault(p => p.Id == id);
             if (!delete)
             {
-                summary.Caption = caption;
-                summary.Annotation = annotation;
-                summary.Like = like;
-                summary.NumberOfSpecialty = numberOfSpecialty;
-                summary.Text = text;
-                summary.LastUpdateTime = DateTime.Now;
-                db.Update(summary);
+                if (!messageExist)
+                {
+                    summary.Caption = caption;
+                    summary.Annotation = annotation;
+                    summary.Like = like;
+                    summary.NumberOfSpecialty = numberOfSpecialty;
+                    summary.Text = text;
+                    summary.LastUpdateTime = DateTime.Now;
+                    db.Update(summary);
+                }
+                else
+                {
+                    Comment comment = new Comment(_userManager.GetUserName(User), parentId, db.Summaries.FirstOrDefault(p => p.Id == id),
+                        messageText);
+                    db.Comments.Add(comment);
+                    db.Summaries.Update(summary);
+                    db.SaveChanges();
+                    return RedirectToAction("ViewAndEditSummary", new { id = id });
+                }
             }
            else
             {
                 db.Remove(summary);
             }
             db.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult ViewSummary(int id)
+        {
+            Summary summary = db.Summaries.Include(x => x.Comments).FirstOrDefault(p => p.Id == id);
+            List<Comment> temporarySummaryComments = new List<Comment>();
+            if (summary.Comments != null)
+            {
+                foreach (var comment in summary.Comments)
+                {
+                    if (comment.ParentCommentId != 0)
+                    {
+                        comment.Text = db.Comments.FirstOrDefault(p => p.Id == comment.ParentCommentId).CreatorName + ", " + comment.Text;
+                    }
+                    temporarySummaryComments.Add(comment);
+                }
+                return View(new ViewAndEditSummaryViewModel(summary, temporarySummaryComments.OrderBy(s => s.CreationTime).ToList()));
+            }
+            else
+            {
+                return View(new ViewAndEditSummaryViewModel(summary, null));
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ViewSummary(int id, int like, bool messageExist, int parentId, string messageText)
+        {
+            Summary summary = db.Summaries.Include(x => x.Comments).FirstOrDefault(p => p.Id == id);
+            if (messageExist)
+            {
+                Comment comment = new Comment(_userManager.GetUserName(User), parentId, db.Summaries.FirstOrDefault(p => p.Id == id),
+                    messageText);
+                db.Comments.Add(comment);
+                db.Summaries.Update(summary);
+                db.SaveChanges();
+                return RedirectToAction("ViewSummary", new { id = id });
+            }
             return RedirectToAction("Index", "Home");
         }
     }
