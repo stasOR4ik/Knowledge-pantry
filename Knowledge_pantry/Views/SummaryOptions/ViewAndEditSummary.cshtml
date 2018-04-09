@@ -8,36 +8,45 @@
     }
 </style>
 
-<form method="post">
-
-    <div class="form-group row">
-        <div class="col-6 col-lg-3">
+<form method="post" class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Heading</label>
+        <div class="col-sm-3">
             <input class="form-control" id="caption" name="caption" value="@Model.Lecture.Caption">
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-6 col-lg-3">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Number of specialty</label>
+        <div class="col-sm-3">
             <input class="form-control" id="numberOfSpecialty" name="numberOfSpecialty" value="@Model.Lecture.NumberOfSpecialty">
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-6 col-lg-6">
-            <textarea class="form-control" id="annotation" name="annotation">@Model.Lecture.Annotation</textarea>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Annotation</label>
+        <div class="col-sm-6">
+            <textarea class="form-control" rows="2" id="annotation" name="annotation">@Model.Lecture.Annotation</textarea>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-6 col-lg-9">
-            <textarea class="form-control" id="text" name="text">@Model.Lecture.Text</textarea>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Text</label>
+        <div class="col-sm-8">
+            <textarea class="form-control" rows="8" id="text" name="text">@Model.Lecture.Text</textarea>
         </div>
     </div>
-    <div class="row form-inline">
-        <div class="">
-            <button type="submit" class="form-control btn btn-primary" asp-route-id="@Model.Lecture.Id" asp-route-like="@Model.Lecture.Like">
+    <div class="form-group">
+        <div class="col-sm-1 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary" asp-route-id="@Model.Lecture.Id" asp-route-like="@Model.Lecture.Like">
                 Edit
             </button>
-            <button type="submit" class="form-control btn btn-danger" asp-route-id="@Model.Lecture.Id" asp-route-delete="@true">Delete</button>
+        </div>
+        <div class="col-sm-1 col-sm-offset-1">
+            <button type="submit" class="btn btn-danger" asp-route-id="@Model.Lecture.Id" asp-route-delete="@true">Delete</button>
+        </div>
+        <div class="col-sm-1 col-sm-offset-1">
+            <button type="submit" class="btn btn-success" asp-route-id="@Model.Lecture.Id" asp-route-view="@true">View</button>
         </div>
     </div>
+    <hr />
     <div class="row">
         <div class="col-lg-6">
             <div class="input-group">
@@ -48,7 +57,6 @@
             </div>
         </div>
     </div>
-
     @if(Model.LectureComments != null)
      {
         foreach (Comment comment in Model.LectureComments)
@@ -59,7 +67,13 @@
                     <input type="radio" value="@comment.Id" name="parentId" />
                     @comment.CreatorName: @comment.Text
                 </label>
-                <footer>@comment.CreationTime</footer>
+                <footer>
+                    @comment.CreationTime
+                    <button type="submit" class="btn" asp-route-id="@Model.Lecture.Id" asp-route-likeExist="@true" asp-route-commentId="@comment.Id">
+                        <span class="glyphicon glyphicon-heart"></span>
+                        @comment.Like
+                    </button>
+                </footer>
             </blockquote>
         </div>
         }

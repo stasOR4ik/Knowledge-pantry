@@ -3,28 +3,20 @@
     ViewData["Title"] = "Home Page";
 }
 @model IEnumerable<Summary>
-<h1>Список статей</h1>
+<h1>List of summaries</h1>
 <table class="table">
     <tr>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.CaptionSort">
-                Caption
-            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.CaptionSort">Caption</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.LastUpdateTimeSort">
-                Date
-            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.LastUpdateTimeSort">Date</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.LikeSort">
-                Like
-            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.LikeSort">Like</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewBag.NumberOfSpecialtySort">
-                Number of specialty
-            </a>
+            <a asp-action="Index" asp-route-sortOrder="@ViewBag.NumberOfSpecialtySort">Number of specialty</a>
         </th>
     </tr>
     @foreach (Summary u in Model)

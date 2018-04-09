@@ -53,7 +53,7 @@ namespace Knowledge_pantry.Controllers
             //user.Summaries.Add(summary);
             //db.Users.Update(user);
             db.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("ViewAndEditSummary", new { id = summary.Id });
         }
 
         [HttpGet]
@@ -77,7 +77,7 @@ namespace Knowledge_pantry.Controllers
                         }
                         temporarySummaryComments.Add(comment);
                     }
-                    return View(new ViewAndEditSummaryViewModel(summary, temporarySummaryComments.OrderBy(s => s.CreationTime).ToList()));
+                    return View(new ViewAndEditSummaryViewModel(summary, temporarySummaryComments.OrderByDescending(s => s.CreationTime).ToList()));
                 }
                 else
                 {
@@ -88,20 +88,39 @@ namespace Knowledge_pantry.Controllers
 
         [HttpPost]
         public IActionResult ViewAndEditSummary(bool delete, string caption, int numberOfSpecialty, string annotation, string text,
-            int id, int like, bool messageExist, int parentId, string messageText)
+            int id, int like, bool messageExist, int parentId, string messageText, bool likeExist, int commentId, bool view)
         {
             Summary summary = db.Summaries.Include(x => x.Comments).FirstOrDefault(p => p.Id == id);
             if (!delete)
             {
                 if (!messageExist)
                 {
-                    summary.Caption = caption;
-                    summary.Annotation = annotation;
-                    summary.Like = like;
-                    summary.NumberOfSpecialty = numberOfSpecialty;
-                    summary.Text = text;
-                    summary.LastUpdateTime = DateTime.Now;
-                    db.Update(summary);
+                    if (view)
+                    {
+                        return RedirectToAction("ViewSummary", new { id = id });
+                    }
+                    else
+                    {
+                        if (likeExist)
+                        {
+                            Comment comment = db.Summaries.FirstOrDefault(p => p.Id == id).Comments.FirstOrDefault(p => p.Id == commentId);
+                            comment.Like++;
+                            db.Comments.Update(comment);
+                            db.Summaries.Update(summary);
+                            db.SaveChanges();
+                            return RedirectToAction("ViewAndEditSummary", new { id = id });
+                        }
+                        else
+                        {
+                            summary.Caption = caption;
+                            summary.Annotation = annotation;
+                            summary.Like = like;
+                            summary.NumberOfSpecialty = numberOfSpecialty;
+                            summary.Text = text;
+                            summary.LastUpdateTime = DateTime.Now;
+                            db.Update(summary);
+                        }
+                    }
                 }
                 else
                 {
@@ -136,7 +155,7 @@ namespace Knowledge_pantry.Controllers
                     }
                     temporarySummaryComments.Add(comment);
                 }
-                return View(new ViewAndEditSummaryViewModel(summary, temporarySummaryComments.OrderBy(s => s.CreationTime).ToList()));
+                return View(new ViewAndEditSummaryViewModel(summary, temporarySummaryComments.OrderByDescending(s => s.CreationTime).ToList()));
             }
             else
             {
@@ -145,7 +164,7 @@ namespace Knowledge_pantry.Controllers
         }
 
         [HttpPost]
-        public IActionResult ViewSummary(int id, int like, bool messageExist, int parentId, string messageText)
+        public IActionResult ViewSummary(int id, int like, bool messageExist, int parentId, string messageText, bool likeExist, int commentId)
         {
             Summary summary = db.Summaries.Include(x => x.Comments).FirstOrDefault(p => p.Id == id);
             if (messageExist)
@@ -153,6 +172,15 @@ namespace Knowledge_pantry.Controllers
                 Comment comment = new Comment(_userManager.GetUserName(User), parentId, db.Summaries.FirstOrDefault(p => p.Id == id),
                     messageText);
                 db.Comments.Add(comment);
+                db.Summaries.Update(summary);
+                db.SaveChanges();
+                return RedirectToAction("ViewSummary", new { id = id });
+            }
+            else if (likeExist)
+            {
+                Comment comment = db.Summaries.FirstOrDefault(p => p.Id == id).Comments.FirstOrDefault(p => p.Id == commentId);
+                comment.Like++;
+                db.Comments.Update(comment);
                 db.Summaries.Update(summary);
                 db.SaveChanges();
                 return RedirectToAction("ViewSummary", new { id = id });
